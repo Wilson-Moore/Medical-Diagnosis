@@ -1,0 +1,29 @@
+{
+  "expo": {
+    "name": "ChestAI",
+    "slug": "chest-xray-ai",
+    "version": "2.0.0",
+    "orientation": "portrait",
+    "backgroundColor": "#03070f",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "ChestAI needs access to your photo library to load X-Ray images for analysis.",
+          "cameraPermission": "ChestAI needs camera access to capture X-Ray images for analysis."
+        }
+      ]
+    ],
+    "android": {
+      "adaptiveIcon": { "backgroundColor": "#03070f" },
+      "package": "com.yourcompany.chestai"
+    },
+    "ios": {
+      "bundleIdentifier": "com.yourcompany.chestai",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "ChestAI needs access to your photo library to load X-Ray images.",
+        "NSCameraUsageDescription": "ChestAI needs camera access to capture X-Ray images."
+      }
+    }
+  }
+}
