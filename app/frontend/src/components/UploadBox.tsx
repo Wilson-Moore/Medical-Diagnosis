@@ -1,48 +1,17 @@
-import { type ChangeEvent, useState } from "react"
+import { type ChangeEvent } from "react"
 import { UploadCloud } from "lucide-react"
 import { motion } from "framer-motion"
 
-import { api } from "../api/api"
-import { type PredictionResponse } from "../types"
-
 interface Props {
-  setResult: React.Dispatch<
-    React.SetStateAction<PredictionResponse | null>
-  >
+  onUpload: (file: File) => Promise<void>
+  isLoading: boolean
 }
 
-export default function UploadBox({ setResult }: Props) {
-
-  const [loading, setLoading] = useState(false)
-
-  async function handleUpload(
-    e: ChangeEvent<HTMLInputElement>
-  ) {
-
+export default function UploadBox({ onUpload, isLoading }: Props) {
+  async function handleUpload(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-
     if (!file) return
-
-    setLoading(true)
-
-    const formData = new FormData()
-    formData.append("file", file)
-
-    try {
-
-      const res = await api.post<PredictionResponse>(
-        "/predict",
-        formData
-      )
-
-      setResult(res.data)
-
-    } catch (err) {
-      console.error(err)
-      alert("Prediction failed")
-    }
-
-    setLoading(false)
+    await onUpload(file)
   }
 
   return (
@@ -50,9 +19,7 @@ export default function UploadBox({ setResult }: Props) {
       whileHover={{ scale: 1.01 }}
       className="block cursor-pointer"
     >
-
       <div className="border-2 border-dashed border-cyan-500/40 bg-white/5 backdrop-blur-xl rounded-[2rem] p-16 text-center hover:border-cyan-400 transition-all duration-300 shadow-2xl">
-
         <div className="flex justify-center mb-6">
           <div className="bg-cyan-500/10 p-5 rounded-full border border-cyan-400/20">
             <UploadCloud className="w-14 h-14 text-cyan-400" />
@@ -64,7 +31,7 @@ export default function UploadBox({ setResult }: Props) {
         </h2>
 
         <p className="text-slate-400 max-w-xl mx-auto leading-relaxed">
-          Drag and drop a radiograph image or click to browse.
+          Click to browse.
           The AI system will generate predictions, heatmaps,
           and structured radiology reports.
         </p>
@@ -73,7 +40,7 @@ export default function UploadBox({ setResult }: Props) {
           Select Image
         </div>
 
-        {loading && (
+        {isLoading && (
           <div className="mt-8 text-cyan-300 animate-pulse text-lg font-medium">
             Analyzing X-Ray...
           </div>
@@ -84,10 +51,9 @@ export default function UploadBox({ setResult }: Props) {
           accept="image/*"
           onChange={handleUpload}
           className="hidden"
+          disabled={isLoading}
         />
-
       </div>
-
     </motion.label>
   )
 }

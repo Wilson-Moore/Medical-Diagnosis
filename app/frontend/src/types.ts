@@ -3,13 +3,17 @@ export interface Prediction {
   probability: number
 }
 
+export interface ModelResults {
+  predictions: Prediction[]
+  report: string
+  heatmap: string | null
+}
+
 export interface PredictionResponse {
   screening: {
     abnormal_probability: number
     is_abnormal: boolean
   }
-
-  predictions: Prediction[]
-  report: string
-  heatmap: string | null
+  efficientnet: ModelResults
+  densenet: ModelResults
 }
